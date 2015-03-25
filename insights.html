@@ -1,106 +1,114 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <meta charset="UTF-8">
-    <title>Insights</title>
-    <script src="js/jquery.min.js"></script>
-    <link rel="stylesheet" href="css/jquery-ui-1.10.0.custom.css">
-    <script src="js/jquery-ui.js"></script>
-    <script src="js/d3.min.js"></script>
-    <script src="js/vega.min.js"></script>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <script src="js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="css/jasny-bootstrap.min.css">
-    <script src="js/jasny-bootstrap.min.js"></script>
-    <script src="filepicker.js"></script>
-    <script src="clusters.js"></script>
-    <script src="playground.js"></script>
+  <meta charset="UTF-8">
+  <title>Insights</title>
+  <script src="js/jquery.min.js"></script>
+  <link rel="stylesheet" href="css/jquery-ui-1.10.0.custom.css">
+  <script src="js/jquery-ui.js"></script>
+  <script src="js/d3.min.js"></script>
+  <script src="js/vega.min.js"></script>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <script src="js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="css/jasny-bootstrap.min.css">
+  <script src="js/jasny-bootstrap.min.js"></script>
+  <script src="filepicker.js"></script>
+  <script src="clusters.js"></script>
+  <script src="playground.js"></script>
+  <style>
+    .upload-btn-container {
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
 <ul class="nav nav-tabs" id="tabs">
-    <li class="active"><a href="#json" data-toggle="tab">Upload JSON</a></li>
-    <li><a href="#clusters" data-toggle="tab">See Clusters</a> </li>
-    <li><a href="#playground" data-toggle="tab">Explore Drivers</a></li>
+  <li class="active"><a href="#json" data-toggle="tab">Upload JSON</a></li>
+  <li><a href="#clusters" data-toggle="tab">See Clusters</a></li>
+  <li><a href="#playground" data-toggle="tab">Explore Drivers</a></li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane active" id="json">
-        <h3>Choose Model JSON</h3>
-        <label class="control-label col-sm-2" for="id_path">Choose the file to upload: </label>
+  <div class="tab-pane active" id="json">
+    <h3>Choose Model JSON</h3>
+    <label class="control-label col-sm-2" for="id_path">Choose the file to upload: </label>
 
-        <div class="fileinput fileinput-new col-sm-6" data-provides="fileinput">
-            <div class="input-group">
-                <div class="form-control uneditable-input" data-trigger="fileinput">
-                    <i class="glyphicon glyphicon-file fileinput-exists"></i>
-                    <span class="fileinput-filename"></span>
-                </div>
+    <div class="fileinput fileinput-new col-sm-6" data-provides="fileinput">
+      <div class="input-group">
+        <div class="form-control uneditable-input" data-trigger="fileinput">
+          <i class="glyphicon glyphicon-file fileinput-exists"></i>
+          <span class="fileinput-filename"></span>
+        </div>
             <span class="input-group-addon btn btn-default btn-file">
                 <span class="fileinput-new">Select file</span>
                 <span class="fileinput-exists">Change</span>
                 <input type="file" name="path" value="" id="id_path">
             </span>
-                <button class="btn btn-primary fileinput-exists" type="submit" id="upload">Upload</button>
-            </div>
-        </div>
+      </div>
+      <div class="upload-btn-container">
+        <button class="btn btn-primary fileinput-exists" type="submit" id="upload">Upload</button>
+      </div>
     </div>
-    <div class="tab-pane" id="clusters">
-        <h3>Here are your clusters</h3>
-        <h4 class="cluster-headline"></h4>
-        <table class="table" id="cluster-details">
-            <thead>
-            <tr>
-                <th class="col-lg-1">#</th>
-                <th class="col-lg-1">Cluster Size</th>
-                <th class="col-lg-1">Conversion in Cluster</th>
-                <th class="col-lg-3">Cluster Definitions</th>
-                <th class="col-lg-3">Key Drivers for Cluster</th>
-            </tr>
-            </thead>
+  </div>
+  <div class="tab-pane" id="clusters">
+    <h3>Here are your clusters</h3>
+    <h4 class="cluster-headline"></h4>
+    <table class="table" id="cluster-details">
+      <thead>
+      <tr>
+        <th class="col-lg-1">#</th>
+        <th class="col-lg-1">Cluster Size</th>
+        <th class="col-lg-1">Conversion in Cluster</th>
+        <th class="col-lg-3">Cluster Definitions</th>
+        <th class="col-lg-3">Key Drivers for Cluster</th>
+      </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="tab-pane" id="playground">
+    <h3>Explore Key Drivers</h3>
+
+    <div>
+      <p>Probability of success for transactions with the below values: <strong style="font-size: 200%; color: darkblue"
+                                                                                id="probability"></strong>
+
+      <p>Change values in the Value column for each column to see new probabilities of success</p>
+
+      <form role="form" id="feature-values">
+        <table class="table" id="feature-values-table">
+          <thead>
+          <tr>
+            <th class="col-lg-1">#</th>
+            <th class="col-lg-2">Variable Name</th>
+            <th class="col-lg-2">Default Value</th>
+            <th class="col-lg-2">Value</th>
+            <th class="col-lg-4">Sensitivity</th>
+          </tr>
+          </thead>
+          <tbody id="feature-values-body">
+          </tbody>
         </table>
+      </form>
     </div>
-    <div class="tab-pane" id="playground">
-        <h3>Explore Key Drivers</h3>
 
-        <div>
-            <p>Probability of success for transactions with the below values: <strong style="font-size: 200%; color: darkblue"
-                                                                                      id="probability"></strong>
-            <p>Change values in the Value column for each column to see new probabilities of success</p>
-
-            <form role="form" id="feature-values">
-                <table class="table" id="feature-values-table">
-                    <thead>
-                    <tr>
-                        <th class="col-lg-1">#</th>
-                        <th class="col-lg-2">Variable Name</th>
-                        <th class="col-lg-2">Default Value</th>
-                        <th class="col-lg-2">Value</th>
-                        <th class="col-lg-4">Sensitivity</th>
-                    </tr>
-                    </thead>
-                    <tbody id="feature-values-body">
-                    </tbody>
-                </table>
-            </form>
-        </div>
-
-    </div>
+  </div>
 </div>
 
 </body>
 <script>
-    $('.fileinput').fileinput();
-    $("#upload").click(function(e) {
-        e.preventDefault();
-        handleFileSelect(callback);
-    });
+  $('.fileinput').fileinput();
+  $("#upload").click(function (e) {
+    e.preventDefault();
+    handleFileSelect(callback);
+  });
 
-    function callback(json) {
-        var $body = $("#feature-values-body");
-        populateFeatureTable(json, $body);
-        $("#tabs").find('a[href="#playground"]').tab("show");
-        addListenersToModelForms($('#feature-values'), json);
+  function callback(json) {
+    var $body = $("#feature-values-body");
+    populateFeatureTable(json, $body);
+    $("#tabs").find('a[href="#playground"]').tab("show");
+    addListenersToModelForms($('#feature-values'), json);
 
-        populateClusters(json, $('#clusters'))
-    }
+    populateClusters(json, $('#clusters'))
+  }
 </script>
 </html>
