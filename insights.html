@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="css/jasny-bootstrap.min.css">
     <script src="js/jasny-bootstrap.min.js"></script>
     <script src="filepicker.js"></script>
+    <script src="clusters.js"></script>
     <script src="playground.js"></script>
 </head>
 <body>
@@ -44,6 +45,18 @@
     </div>
     <div class="tab-pane" id="clusters">
         <h3>Here are your clusters</h3>
+        <h4 class="cluster-headline"></h4>
+        <table class="table" id="cluster-details">
+            <thead>
+            <tr>
+                <th class="col-lg-1">#</th>
+                <th class="col-lg-1">Cluster Size</th>
+                <th class="col-lg-1">Conversion in Cluster</th>
+                <th class="col-lg-3">Cluster Definitions</th>
+                <th class="col-lg-3">Key Drivers for Cluster</th>
+            </tr>
+            </thead>
+        </table>
     </div>
     <div class="tab-pane" id="playground">
         <h3>Explore Key Drivers</h3>
@@ -86,6 +99,8 @@
         populateFeatureTable(json, $body);
         $("#tabs").find('a[href="#playground"]').tab("show");
         addListenersToModelForms($('#feature-values'), json);
+
+        populateClusters(json, $('#clusters'))
     }
 </script>
 </html>
